@@ -1,0 +1,37 @@
+server:
+  port: ${PORT:${SERVER_PORT:8082}}
+
+spring:
+  application:
+    name: product-service
+  cache:
+    # Cache chi tiet san pham: Redis, TTL 30 phut (chong day boi san pham cu).
+    # Ghi de bang env khi chay docker. Redis down -> fallback DB (xem RedisCacheConfig).
+    type: redis
+    redis:
+      time-to-live: 30m
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      timeout: 2s
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/md04_ss03_bai_03_product_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 30
+    service-url:
+      defaultZone: http://localhost:8761/eureka
